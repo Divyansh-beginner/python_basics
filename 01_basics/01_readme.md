@@ -1,0 +1,4 @@
+the python code converts into byte code (kind of compiles into ), which is not machine code , and its in .pye format ! usually this file(the .pye format one) is not visible by us but when a file(.py files) is imported we can see the file(.pye file of that .py file i.e. the byte code file of that python file) in the folder __pycache__
+the __ before and after a folder like __pycache__ means its for internal byte related working of python and its interpreter engine and usually doesn't required/needed to be altered by the user.
+the python virtual machine (PVM) is the main engine that converts this byte code into machine code , does it lineraly or line by line , at this step it becomes interpreted. 
+when we import a method/function from a file , that file got run first automatically one time ! to prevent the code from executing there is a method which is kind of adding entire code into a if statement that kind of checks the file name or something.
