@@ -1,0 +1,3 @@
+every language that make objects of values and then the variable names point to it , in such langs there could be multiple names pointing to same memory block/object , so they have a reference_count(how many variable names are referencing to it).
+but when sys.getrefcount("astring") from the sys library is used or any number is used then we always get a random big number , its because python initially does some optimisation and assign some refrence count to them.
+usually when a value inside memory doesn't have any variable pointing to it , it gets collected by garbage collector , but the process is a lil slower for string and numbers due to ooptimisation reasons , as they are frequently reused.
