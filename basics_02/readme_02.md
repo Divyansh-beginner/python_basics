@@ -1,0 +1,2 @@
+operator overloading is when traditional operators like eg. + could be used in other sense than their real purpose. ex: "hello " + "sir." is equal to "hello sir." ! it could also be custom made , their are ways for it.
+tuples are the objects that are automatically being used by the python when some data has to be given/shown/combined together like showing multiple vars together or getting data from an api etc , they all are recieved in tuple automatically.
