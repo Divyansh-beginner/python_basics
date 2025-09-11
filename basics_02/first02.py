@@ -36,7 +36,7 @@ print(li1[0])
 li1[0]=22
 print(li1==li3)
 print(li1 is li3)
-
+ 
 
 
 
