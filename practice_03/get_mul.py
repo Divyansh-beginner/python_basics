@@ -1,0 +1,10 @@
+import all_functions
+num1:int = int(input("enter a number: "))
+string:str = input("enter the string: ")
+num2:int = int(input("enter another number: "))
+multiplied_string:str = all_functions.multiply(string , num1)
+print(multiplied_string)
+multiplied_string:str = all_functions.multiply(num2 , string)
+print(multiplied_string)
+multiplied_num:int = all_functions.multiply(num1 , num2)
+print(multiplied_num)
