@@ -32,3 +32,31 @@ def greet(name:str=None)->None:
         print(f"greetings user {name}")
 
 cube: int = lambda a : a**3
+
+def variable_parameters_sum(*nums:tuple[int])->int :
+    sum:int = 0
+    for num in nums:
+        sum += num
+    return sum    
+
+def variable_keyword_args(**kwargs:dict[any,any])->None:
+    print(kwargs)
+    print("----------------------")
+    print(*kwargs)
+    print("----------------------")
+    # print(**kwargs)
+    # print(type(**kwargs))
+    print("----------------------")
+    for keys in kwargs:
+        print(keys,": ",kwargs[keys])
+
+def generate_even_nums_upto_limit(limit:int)->int:
+    for even_num in range(0 , limit+1, 2):
+        yield even_num
+
+def factorial(value:int)->int:
+    if value == 0 or value == 1 : return 1
+    return value * factorial(value-1)
+
+
+
