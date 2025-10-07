@@ -11,6 +11,10 @@ def get_connection()->sql.Connection:
         _conn = sql.connect("yt_videos_list.db")
     return _conn
  
+def close_connection()-> None:
+    conn = get_connection()
+    conn.close()
+
 def get_cursor_from_connection_and_make_table_if_not_exists(conn:sql.Connection)->sql.Cursor:
     cur = conn.cursor()
     cur.execute('''
@@ -28,7 +32,7 @@ def execute_query_to_get_list()->list[tuple[int , str , str]]:
     conn = get_connection()
     cur = get_cursor_from_connection_and_make_table_if_not_exists(conn)
     vid_list = list(cur.execute('''
-    select position , video_name , duration from video_list;
+    select position , video_name , duration from video_list order by position;
     '''))
     return vid_list
 
@@ -40,7 +44,7 @@ def execute_query_to_add_vid_name_time_and_position(name:str , time:str , pos:in
     if vid_list == []: 
         print("the list is empty , adding the first video at first position")
         pos = 1
-    elif pos>vid_list : 
+    elif pos>len(vid_list)+1 : 
         pos = len(vid_list)+1
         print(f"given position is invalid , adding video at end at last position {pos}")
     else : print(f"adding the video at {pos} position")
@@ -52,6 +56,7 @@ def execute_query_to_add_vid_name_time_and_position(name:str , time:str , pos:in
     insert into video_list(position , video_name , duration) values(?,?,?);
     ''',(pos , name , time))
     conn.commit()
+    input("successfully added video , press Enter to continue. ")
 
 def execute_query_to_update_video_at_given_position(name:str , time:str ,pos:int)->None:
     conn = get_connection()
@@ -76,10 +81,10 @@ def execute_query_to_delete_video_at_given_position(pos:int)->None:
 
     cur.execute('''
     delete from video_list where position = (?);
-    ''',(pos))
+    ''',(pos,))
     cur.execute('''
     update video_list set position = position-1 where position>(?)
-    ''',(pos))
+    ''',(pos,))
     conn.commit()
 
 def execute_query_to_delete_table()->None:
@@ -143,10 +148,10 @@ def add_video()->None:
 def update_video()->None:
     flag:bool = show_list()
     if flag:
+        position = get_position()
         name = get_name()
         duration = get_time()
-        position = get_position()
-        execute_query_to_update_video_at_given_position(name , time ,position)
+        execute_query_to_update_video_at_given_position(name , duration ,position)
         show_list()
 
 def delete_video()->None:
@@ -188,4 +193,6 @@ def get_final_choice_to_exit_app()->bool:
     os.system("clear")
     confirmation = input("Do you want to exit the app? enter 'y' or 'Y' to exit else anything to continue in app: ")
     os.system("clear")
-    return confirmation == 'y' or confirmation == 'Y'
+    choice:bool = (confirmation == 'y' or confirmation == 'Y')
+    if choice : close_connection()
+    return choice
