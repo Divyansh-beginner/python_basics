@@ -14,16 +14,22 @@ def get_file_name_dir(data):
     return directory
 
 def main():    
-    s = socket.socket()
-    s.bind(('0.0.0.0', 62055))
-    s.listen()
-    while(True):
-        new_conn , addr = s.accept()
-        data = new_conn.recv(1024).decode()
-        print(data)
-        file_name_dir = get_file_name_dir(data)
-        with open(file_name_dir,"r",encoding="utf-8",errors="ignore") as data_to_send:
-            new_conn.send(json.dumps(data_to_send.read()).encode())
-        new_conn.close()
+    with socket.socket() as s:
+        s.bind(('0.0.0.0', 62055))
+        s.listen()
+        while(True):
+            new_conn , addr = s.accept()
+            print(f"a connection made with addr: {addr}")
+            data = new_conn.recv(1024).decode()
+            print("*"*50)
+            print(data)
+            if data.lower() == "exit" or data.lower() == "\\exit" or data.lower() == "/exit" : 
+                print("server closed !")
+                break
+            print(data)
+            file_name_dir = get_file_name_dir(data)
+            with open(file_name_dir,"r",encoding="utf-8",errors="ignore") as data_to_send:
+                new_conn.send(json.dumps(data_to_send.read()).encode())
+            new_conn.close()
 
 if __name__ == "__main__":main()
