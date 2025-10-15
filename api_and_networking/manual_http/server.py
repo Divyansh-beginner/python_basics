@@ -3,8 +3,8 @@ import socket
 def build_http_template(content)->str:
     response = (
         "HTTP/1.1 200 OK\r\n"
-        +f"content_length: {len(content)}\r\n"
-        +"content_type: text/plain\r\n"
+        +f"Content-Length: {len(content)}\r\n"
+        +"Content-Type: text/plain\r\n"
         +"\r\n"
         +content
     )
@@ -54,6 +54,15 @@ def handle_invalid(conn , path):
     response = build_http_template(main_content)
     conn.sendall(response.encode())
 
+def recv_full_data_in_string(conn):
+    data = b""
+    while True:
+        part = conn.recv(1024)
+        if part is None:
+            break
+        data += part
+    return data.decode() 
+
 with socket.socket() as s:
     s.bind(('0.0.0.0', 58954))
     s.listen()
@@ -62,7 +71,7 @@ with socket.socket() as s:
         new_conn , addr = s.accept()
         with new_conn:
             print(f"new request is made from {addr}")
-            data = new_conn.recv(1024).decode()
+            data = recv_full_data_in_string(new_conn)
             print(data)
             list_of_lines = data.split("\r\n")
             print("*"*55,"\n",list_of_lines)
