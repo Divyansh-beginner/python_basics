@@ -23,7 +23,7 @@ def new_sensor(sensor_id):
     try:    
         while(True):
             attr_value = get_attr_value(attr_type)
-            msg = f"sensor_id:{sensor_id}\n\rtype:{attr_type}\r\nattribute_value:{attr_value}"
+            msg = f"{sensor_id}\r\n{attr_type}\r\n{attr_value}"
             s.sendall(msg.encode())
             time.sleep(random.uniform(1,5))
     except Exception as e:
