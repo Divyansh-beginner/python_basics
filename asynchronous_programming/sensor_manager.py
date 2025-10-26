@@ -29,7 +29,7 @@ async def manager():
         task2 = asy.create_task(sensor(2 , random.triangular(5 , 20 , 8)))
         task3 = asy.create_task(sensor(3 , random.triangular(5 , 20 , 7)))
         tasks = [task1,task2,task3]
-        _ = asy.create_task(create_new_tasks(tasks))
+        sensors = asy.create_task(create_new_tasks(tasks))
         while True:
             done , pending = await asy.wait(tasks,return_when=asy.FIRST_COMPLETED)
             print("beginning loop after this line")
@@ -42,8 +42,17 @@ async def manager():
             for t in pending :
                 t.cancel()
                 tasks.remove(t)
-    await asy.wait_for(wrapper(),20)
-    if wrapper.done() : create_new_tasks.cancel()
+        return sensors
+    
+    wrapper_task = asy.create_task(wrapper())
+    try:
+        sensors_task = await asy.wait_for(wrapper_task,20)
+    except TimeoutError: 
+        print("timeout of wrapper, cancelling inner sensor spawner...")
+        if not wrapper_task.done():
+            wrapper.task.cancel()
+    else: sensors_task.cancel()
+    
 
 def main():
     asy.run(manager())
