@@ -1,7 +1,9 @@
 class Config:
-    def __init__(self,mode:str,target_list:list):
+    def __init__(self,mode:str,target_list:list,fetcher_no:int,processor_no:int):
         self.mode = mode
         self.target_list = target_list
+        self.fetcher_no = fetcher_no
+        self.processor_no = processor_no
     @classmethod
     def run(cls):
         target_list = [
@@ -30,4 +32,4 @@ class Config:
         # UNKNOWN endpoint
         {"url": "http://localhost/unknown/resource", "method": "GET"},
         ]
-        return cls(mode="fake",target_list=target_list)
+        return cls(mode="fake",target_list=target_list,fetcher_no =5,processor_no =3)
